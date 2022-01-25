@@ -7,8 +7,8 @@ public enum HorizontalAlign { Right, Middle, Left, Current }
 
 public class ResponsiveHelper
 {
-    private static float cameraHeight;
-    private static float cameraWidth;
+    public static float cameraHeight;
+    public static float cameraWidth;
     private static bool isScreenSizeInitialized = false;
 
 
@@ -46,17 +46,28 @@ public class ResponsiveHelper
         target.transform.localScale = scale;
     }
 
-    public static void SetPosition(GameObject target, VerticalAlign verticalAlign, HorizontalAlign horizontalAlign)
+    public static void SetPosition(GameObject target, VerticalAlign verticalAlign,
+        HorizontalAlign horizontalAlign, float verticalMargin = 0.0f, float horizontalMargin = 0.0f)
     {
         if (!isScreenSizeInitialized)
             UpdateScreenSize();
 
         var position = target.transform.localPosition;
 
+        position.y = UpdateVerticalPosition(verticalAlign, target, verticalMargin);
+        position.x = UpdateHorizontalPosition(horizontalAlign, target, horizontalMargin);
+
+        target.transform.localPosition = position;
+    }
+
+    private static float UpdateVerticalPosition(VerticalAlign verticalAlign, GameObject target, float verticalMargin)
+    {
+        var position = target.transform.localPosition;
+
         switch (verticalAlign)
         {
             case VerticalAlign.Top:
-                position.y = cameraHeight / 2;
+                position.y = cameraHeight / 2 + target.transform.localScale.y / 2;
                 break;
 
             case VerticalAlign.Middle:
@@ -64,7 +75,7 @@ public class ResponsiveHelper
                 break;
 
             case VerticalAlign.Bottom:
-                position.y = -cameraHeight / 2;
+                position.y = -(cameraHeight / 2 + target.transform.localScale.y / 2);
                 break;
 
             case VerticalAlign.Current:
@@ -72,27 +83,36 @@ public class ResponsiveHelper
                 break;
         }
 
+        position.y += verticalMargin;
+
+        return position.y;
+    }
+
+    private static float UpdateHorizontalPosition(HorizontalAlign horizontalAlign, GameObject target, float horizontalMargin)
+    {
+        var position = target.transform.localPosition;
+
         switch (horizontalAlign)
         {
-            case HorizontalAlign.Left:
-                position.x = cameraWidth / 2;
+            case HorizontalAlign.Right:
+                position.x = cameraWidth / 2 + target.transform.localScale.x / 2;
                 break;
 
             case HorizontalAlign.Middle:
                 position.x = 0;
                 break;
 
-            case HorizontalAlign.Right:
-                position.x = -cameraWidth / 2;
+            case HorizontalAlign.Left:
+                position.x = -(cameraWidth / 2 + target.transform.localScale.x / 2);
                 break;
 
             case HorizontalAlign.Current:
             default:
                 break;
-
         }
 
-        target.transform.localPosition = position;
+        position.x += horizontalMargin;
+        return position.x;
     }
 
     private static void UpdateScreenSize()

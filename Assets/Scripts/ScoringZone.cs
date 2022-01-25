@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ScoringZone : MonoBehaviour
 {
+    // TODO: convert to c# event. currenty deppends unity inspector
     public EventTrigger.TriggerEvent scoreTrigger;
 
     private void OnCollisionEnter2D(Collision2D collision)
