@@ -8,7 +8,7 @@ public class Paddle : MonoBehaviour
     public float horizontalMargin = 1.0f;
     protected Rigidbody2D _rigidbody;
 
-    void Awake()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }

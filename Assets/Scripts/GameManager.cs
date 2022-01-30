@@ -5,16 +5,16 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public enum GameMode { OnePlayer, TwoPlayer }
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Ball ball;
-    private GameMode gameMode;
 
     // Paddles
-    [SerializeField] private Paddle playerPaddle;
+    [SerializeField] private Paddle playerPaddleLeft;
+    [SerializeField] private Paddle playerPaddleRight;
     [SerializeField] private Paddle computerPaddle;
+    private Paddle rightPaddle;
 
     // Walls
     [SerializeField] private Wall topWall;
@@ -43,12 +43,12 @@ public class GameManager : MonoBehaviour
     // Scores
     private int playerScore;
     private int computerScore;
+    private bool isGamePlaying = false;
 
     private void Awake()
     {
         ActivateScreen(mainMenuScreen);
-        SetButotnsClickListener();
-        FixPositions();
+        SetButtonsClickListener();
     }
 
     private void Update()
@@ -59,29 +59,30 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.R))
         {
-            ResetRound();
+            if (isGamePlaying)
+                ResetRound();
         }
     }
 
     private void FixPositions()
     {
-        // set Paddles position
-        ResponsiveHelper.SetPosition(
-            computerPaddle.gameObject,
-            VerticalAlign.Middle,
-            HorizontalAlign.Right,
-            horizontalMargin: -computerPaddle.horizontalMargin
-        );
-
-        ResponsiveHelper.SetPosition(
-            playerPaddle.gameObject,
-            VerticalAlign.Middle,
-            HorizontalAlign.Left,
-            horizontalMargin: playerPaddle.horizontalMargin
-        );
-
         // set Ball position
         ResponsiveHelper.SetPosition(ball.gameObject, VerticalAlign.Middle, HorizontalAlign.Middle);
+
+        // set Left Paddles position
+        ResponsiveHelper.SetPosition(
+            playerPaddleLeft.gameObject,
+            VerticalAlign.Middle,
+            HorizontalAlign.Left,
+            horizontalMargin: playerPaddleLeft.horizontalMargin
+        );
+
+        ResponsiveHelper.SetPosition(
+            rightPaddle.gameObject,
+            VerticalAlign.Middle,
+            HorizontalAlign.Right,
+            horizontalMargin: -rightPaddle.horizontalMargin
+        );
 
         // match Walls scale to screen size
         ResponsiveHelper.FixScale(topWall.gameObject, ScaleType.Width);
@@ -119,7 +120,7 @@ public class GameManager : MonoBehaviour
         );
     }
 
-    private void SetButotnsClickListener()
+    private void SetButtonsClickListener()
     {
         onePlayerBtn.onClick.AddListener(OnOnePlayerClicked);
         twoPlayerBtn.onClick.AddListener(OnTwoPlayerClicked);
@@ -149,12 +150,13 @@ public class GameManager : MonoBehaviour
 
     public void ResetRound()
     {
-        playerPaddle.ResetPosition();
-        computerPaddle.ResetPosition();
+        playerPaddleLeft.ResetPosition();
+        rightPaddle.ResetPosition();
 
         ball.ResetPosition();
         ball.AddStartingForce();
     }
+
     private void PlayScoreSound()
     {
         // AudioManager.instance.PlayExplosionSound();
@@ -177,16 +179,32 @@ public class GameManager : MonoBehaviour
         helpScreen.SetActive(false);
     }
 
+    private void SetGameMode(GameMode gameMode)
+    {
+        Configs.gameMode = gameMode;
+
+        playerPaddleLeft.gameObject.SetActive(true);
+
+        // set Right Paddles position
+        rightPaddle = Configs.gameMode == GameMode.OnePlayer ? computerPaddle : playerPaddleRight;
+
+        rightPaddle.gameObject.SetActive(true);
+    }
+
     public void OnOnePlayerClicked()
     {
-        gameMode = GameMode.OnePlayer;
+        SetGameMode(GameMode.OnePlayer);
+        FixPositions();
         ActivateScreen(gameplayScreen);
+        isGamePlaying = true;
     }
 
     public void OnTwoPlayerClicked()
     {
-        gameMode = GameMode.TwoPlayer;
+        SetGameMode(GameMode.TwoPlayer);
+        FixPositions();
         ActivateScreen(gameplayScreen);
+        isGamePlaying = true;
     }
 
     public void OnAboutClicked()
