@@ -5,8 +5,8 @@ using UnityEngine;
 public class BouncySurface : MonoBehaviour
 {
     public float bounceStrength = 20.0f;
-    private float minBounce = 0.0f;
-    private float maxBounce = 2.0f;
+    // private float minBounce = 0.0f;
+    // private float maxBounce = 2.0f;
 
     [Range(1f, 5f)]
     public float bounceDistraction = 1f;

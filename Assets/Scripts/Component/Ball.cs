@@ -5,15 +5,15 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 200.0f;
-
-    [SerializeField]
-    private float minXVelocity = 6f;
-    private float lastMinXVelocity = 0f;
+    private float speed = 300.0f;
+    private float maxVelocity = 10f;
+    private float minXVelocity;
+    // private float lastMinXVelocity = 0f;
     private Rigidbody2D rigidbody2;
 
     private void Awake()
     {
+        minXVelocity = speed / 50f;
         rigidbody2 = GetComponent<Rigidbody2D>();
     }
 
@@ -31,51 +31,7 @@ public class Ball : MonoBehaviour
             AddStartingForce();
         }
 
-        // CheckMinVelocity();
-    }
-
-    private void CheckMinVelocity()
-    {
-        var vel = rigidbody2.velocity;
-        float x = vel.x;
-
-        if (x == 0f)
-            return;
-
-        // float xAbs = Mathf.Abs(x);
-
-        // if (xAbs < lastMinXVelocity)
-        // {
-        //     float signX = Mathf.Sign(x);
-
-        //     vel.x = lastMinXVelocity * signX;
-        //     rigidbody2.velocity = vel;
-
-        //     Debug.Log($"old: {x}  new:{vel.x}");
-        // }
-        // else
-        // {
-        //     lastMinXVelocity = xAbs;
-        // }
-
-        if (vel.x > 0.0f)
-        {
-            if (vel.x < minXVelocity)
-            {
-                vel.x = minXVelocity;
-                rigidbody2.velocity = vel;
-                Debug.Log($"old: {x}  new:{vel.x} - Y:{vel.y}");
-            }
-        }
-        else
-        {
-            if (vel.x > -minXVelocity)
-            {
-                vel.x = -minXVelocity;
-                rigidbody2.velocity = vel;
-                Debug.Log($"old: {x}  new:{vel.x} - Y:{vel.y}");
-            }
-        }
+        ClampVelocity();
     }
 
     private bool IsOutOfScreen()
@@ -89,11 +45,52 @@ public class Ball : MonoBehaviour
             y < -ResponsiveHelper.cameraHeight;
     }
 
+    private void ClampVelocity()
+    {
+        var v = rigidbody2.velocity;
+
+        v.x = limitToMin(v.x);
+
+        // Debug.Log(Vector2.SqrMagnitude(v));
+        // Debug.Log(Vector2.ClampMagnitude(v));
+        v.x = limitToMax(v.x);
+        v.y = limitToMax(v.y);
+
+        rigidbody2.velocity = v;
+    }
+
+    private float limitToMin(float value)
+    {
+        if (value > 0.0f && value < minXVelocity)
+        {
+            value = minXVelocity;
+        }
+        else if (value < 0.0f && value > -minXVelocity)
+        {
+            value = -minXVelocity;
+        }
+
+        return value;
+    }
+    private float limitToMax(float value)
+    {
+        if (value > 0.0f && value > maxVelocity)
+        {
+            value = maxVelocity;
+        }
+        else if (value < 0.0f && value < -maxVelocity)
+        {
+            value = -maxVelocity;
+        }
+
+        return value;
+    }
+
     public void Reset()
     {
         rigidbody2.position = Vector2.zero;
         rigidbody2.velocity = Vector2.zero;
-        lastMinXVelocity = 0f;
+        // lastMinXVelocity = 0f;
     }
 
     public void AddStartingForce()
