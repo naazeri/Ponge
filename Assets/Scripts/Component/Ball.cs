@@ -17,7 +17,7 @@ public class Ball : MonoBehaviour
         rigidbody2 = GetComponent<Rigidbody2D>();
     }
 
-    void Start()
+    void OnEnable()
     {
         Reset();
         AddStartingForce();

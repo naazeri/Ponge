@@ -14,7 +14,7 @@ public class HelpScene : BaseMenuScene
         }
         else
         {
-            text = "Movement: WASD or Arrow Keys\nReset Round: R";
+            text = "Movement: WASD or Arrow Keys\nReset Round: R\nExit: Esc";
         }
 
         title.text = text;

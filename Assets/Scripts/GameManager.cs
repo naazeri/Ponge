@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     // Scores
     private int playerScore;
     private int computerScore;
-    private bool isGamePlaying = false;
+    private bool isGameplaying = false;
 
     private void Awake()
     {
@@ -55,13 +55,23 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        HandleInput();
+    }
+
+    private void HandleInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            if (isGameplaying)
+            {
+                isGameplaying = false;
+            }
+
+            OnBackToMenuClicked();
         }
-        else if (Input.GetKey(KeyCode.R))
+        else if (Input.GetKeyDown(KeyCode.R))
         {
-            if (isGamePlaying)
+            if (isGameplaying)
                 ResetRound();
         }
     }
@@ -196,20 +206,25 @@ public class GameManager : MonoBehaviour
         rightPaddle.gameObject.SetActive(true);
     }
 
-    public void OnOnePlayerClicked()
+    private void InitGamePlay(GameMode gameMode)
     {
-        SetGameMode(GameMode.OnePlayer);
+        SetGameMode(gameMode);
         InitGamePlaySceneObjects();
         ActivateScreen(gameplayScreen);
-        isGamePlaying = true;
+        isGameplaying = true;
+
+        if (!Application.isEditor && !Application.isMobilePlatform)
+            CursorHelper.SetVisible(false);
+    }
+
+    public void OnOnePlayerClicked()
+    {
+        InitGamePlay(GameMode.OnePlayer);
     }
 
     public void OnTwoPlayerClicked()
     {
-        SetGameMode(GameMode.TwoPlayer);
-        InitGamePlaySceneObjects();
-        ActivateScreen(gameplayScreen);
-        isGamePlaying = true;
+        InitGamePlay(GameMode.TwoPlayer);
     }
 
     public void OnAboutClicked()
@@ -226,6 +241,8 @@ public class GameManager : MonoBehaviour
     {
         if (!currentScreen.Equals(mainMenuScreen))
             ActivateScreen(mainMenuScreen);
+        else
+            Application.Quit();
     }
 
     public void OnExitClicked()

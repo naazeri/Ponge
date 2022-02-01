@@ -6,6 +6,6 @@ public class AboutScene : BaseMenuScene
 {
     void Start()
     {
-        title.text = "Developer: Naazeri\nSite: naazeri.ir";
+        title.text = "Developer: Naazeri\nWebsite: naazeri.ir";
     }
 }

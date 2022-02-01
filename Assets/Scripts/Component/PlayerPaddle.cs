@@ -8,7 +8,7 @@ public class PlayerPaddle : Paddle
     [SerializeField] private bool isLeftPlayer = true;
     private Vector2 direction;
 
-    private void Start()
+    private void Awake()
     {
         if (Application.isMobilePlatform)
         {
