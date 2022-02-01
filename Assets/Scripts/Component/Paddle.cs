@@ -5,6 +5,8 @@ using UnityEngine;
 public class Paddle : MonoBehaviour
 {
     public float speed = 1800.0f;
+
+    [HideInInspector]
     public float horizontalMargin = 1.0f;
     protected Rigidbody2D _rigidbody;
 

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3bf51ccce007ac2468348890280f1e4e
+guid: 9f1b6be56d571d540992c1047c29f64f
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Toon Around
+  fontName: VCR OSD Mono
   fontNames:
-  - Toon Around
+  - VCR OSD Mono
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

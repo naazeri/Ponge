@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    public float speed = 230.0f;
-    public float minXVelocity = 5f;
+    [SerializeField]
+    private float speed = 200.0f;
+
+    [SerializeField]
+    private float minXVelocity = 6f;
+    private float lastMinXVelocity = 0f;
     private Rigidbody2D rigidbody2;
 
     private void Awake()
@@ -15,7 +19,7 @@ public class Ball : MonoBehaviour
 
     void Start()
     {
-        ResetPosition();
+        Reset();
         AddStartingForce();
     }
 
@@ -23,26 +27,44 @@ public class Ball : MonoBehaviour
     {
         if (IsOutOfScreen())
         {
-            ResetPosition();
+            Reset();
             AddStartingForce();
         }
 
-        CheckMinVelocity();
+        // CheckMinVelocity();
     }
 
     private void CheckMinVelocity()
     {
         var vel = rigidbody2.velocity;
+        float x = vel.x;
 
-        if (vel.x == 0f)
+        if (x == 0f)
             return;
 
-        if (vel.x > 0)
+        // float xAbs = Mathf.Abs(x);
+
+        // if (xAbs < lastMinXVelocity)
+        // {
+        //     float signX = Mathf.Sign(x);
+
+        //     vel.x = lastMinXVelocity * signX;
+        //     rigidbody2.velocity = vel;
+
+        //     Debug.Log($"old: {x}  new:{vel.x}");
+        // }
+        // else
+        // {
+        //     lastMinXVelocity = xAbs;
+        // }
+
+        if (vel.x > 0.0f)
         {
             if (vel.x < minXVelocity)
             {
                 vel.x = minXVelocity;
                 rigidbody2.velocity = vel;
+                Debug.Log($"old: {x}  new:{vel.x} - Y:{vel.y}");
             }
         }
         else
@@ -51,6 +73,7 @@ public class Ball : MonoBehaviour
             {
                 vel.x = -minXVelocity;
                 rigidbody2.velocity = vel;
+                Debug.Log($"old: {x}  new:{vel.x} - Y:{vel.y}");
             }
         }
     }
@@ -66,10 +89,11 @@ public class Ball : MonoBehaviour
             y < -ResponsiveHelper.cameraHeight;
     }
 
-    public void ResetPosition()
+    public void Reset()
     {
         rigidbody2.position = Vector2.zero;
         rigidbody2.velocity = Vector2.zero;
+        lastMinXVelocity = 0f;
     }
 
     public void AddStartingForce()
@@ -79,8 +103,6 @@ public class Ball : MonoBehaviour
 
         var direction = new Vector2(x, y);
         rigidbody2.AddForce(direction * speed);
-
-        // minVelocity = rigidbody2.velocity;
     }
     public void AddForce(Vector2 force)
     {

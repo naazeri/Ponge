@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Wall bottomWall;
     [SerializeField] private Wall rightWall;
     [SerializeField] private Wall leftWall;
-    [SerializeField] private TextMeshProUGUI playerScoreText;
-    [SerializeField] private TextMeshProUGUI computerScoreText;
+    [SerializeField] private TMP_Text playerScoreText;
+    [SerializeField] private TMP_Text computerScoreText;
 
     // Screens
     [SerializeField] private GameObject mainMenuScreen;
@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     private GameObject currentScreen;
 
     // Buttons
+    [SerializeField] private GameObject touchButtons;
     [SerializeField] private Button onePlayerBtn;
     [SerializeField] private Button twoPlayerBtn;
     [SerializeField] private Button aboutBtn;
@@ -48,7 +49,8 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         ActivateScreen(mainMenuScreen);
-        SetButtonsClickListener();
+
+        SetMenuButtonsClickListener();
     }
 
     private void Update()
@@ -64,8 +66,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void FixPositions()
+    private void InitGamePlaySceneObjects()
     {
+        bool activateStatus = Application.isMobilePlatform;
+        touchButtons.SetActive(activateStatus);
+
         // set Ball position
         ResponsiveHelper.SetPosition(ball.gameObject, VerticalAlign.Middle, HorizontalAlign.Middle);
 
@@ -120,7 +125,7 @@ public class GameManager : MonoBehaviour
         );
     }
 
-    private void SetButtonsClickListener()
+    private void SetMenuButtonsClickListener()
     {
         onePlayerBtn.onClick.AddListener(OnOnePlayerClicked);
         twoPlayerBtn.onClick.AddListener(OnTwoPlayerClicked);
@@ -153,7 +158,7 @@ public class GameManager : MonoBehaviour
         playerPaddleLeft.ResetPosition();
         rightPaddle.ResetPosition();
 
-        ball.ResetPosition();
+        ball.Reset();
         ball.AddStartingForce();
     }
 
@@ -194,7 +199,7 @@ public class GameManager : MonoBehaviour
     public void OnOnePlayerClicked()
     {
         SetGameMode(GameMode.OnePlayer);
-        FixPositions();
+        InitGamePlaySceneObjects();
         ActivateScreen(gameplayScreen);
         isGamePlaying = true;
     }
@@ -202,7 +207,7 @@ public class GameManager : MonoBehaviour
     public void OnTwoPlayerClicked()
     {
         SetGameMode(GameMode.TwoPlayer);
-        FixPositions();
+        InitGamePlaySceneObjects();
         ActivateScreen(gameplayScreen);
         isGamePlaying = true;
     }
@@ -215,6 +220,12 @@ public class GameManager : MonoBehaviour
     public void OnHelpClicked()
     {
         ActivateScreen(helpScreen);
+    }
+
+    public void OnBackToMenuClicked()
+    {
+        if (!currentScreen.Equals(mainMenuScreen))
+            ActivateScreen(mainMenuScreen);
     }
 
     public void OnExitClicked()
