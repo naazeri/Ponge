@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
-
 
 public class GameManager : MonoBehaviour
 {
@@ -27,8 +26,6 @@ public class GameManager : MonoBehaviour
     // Screens
     [SerializeField] private GameObject mainMenuScreen;
     [SerializeField] private GameObject gameplayScreen;
-    // [SerializeField] private GameObject onePlayerScreen;
-    // [SerializeField] private GameObject twoPlayerScreen;
     [SerializeField] private GameObject aboutScreen;
     [SerializeField] private GameObject helpScreen;
     private GameObject currentScreen;
@@ -65,6 +62,7 @@ public class GameManager : MonoBehaviour
             if (isGameplaying)
             {
                 isGameplaying = false;
+                ResetScore();
             }
 
             OnBackToMenuClicked();
@@ -154,6 +152,7 @@ public class GameManager : MonoBehaviour
         ResetRound();
     }
 
+    // recieve scoreTrigger
     public void ComputerGotScore()
     {
         computerScore++;
@@ -167,9 +166,17 @@ public class GameManager : MonoBehaviour
     {
         playerPaddleLeft.ResetPosition();
         rightPaddle.ResetPosition();
-
         ball.Reset();
         ball.AddStartingForce();
+    }
+
+    private void ResetScore()
+    {
+        playerScore = 0;
+        computerScore = 0;
+
+        playerScoreText.text = playerScore.ToString();
+        computerScoreText.text = computerScore.ToString();
     }
 
     private void PlayScoreSound()

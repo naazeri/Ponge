@@ -13,7 +13,7 @@ public class Ball : MonoBehaviour
 
     private void Awake()
     {
-        minXVelocity = speed / 50f;
+        minXVelocity = speed / 55f;
         rigidbody2 = GetComponent<Rigidbody2D>();
     }
 
