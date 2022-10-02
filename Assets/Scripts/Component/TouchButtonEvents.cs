@@ -7,7 +7,7 @@ public enum ButtonClickStatus { OnPointerDown, OnPointerUp };
 
 public class TouchButtonEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    // Event
+    // Button Event
     public delegate void ButtonClick(ButtonPosition buttonPosition, ButtonClickStatus buttonClickStatus);
     public static event ButtonClick OnButtonClick;
 

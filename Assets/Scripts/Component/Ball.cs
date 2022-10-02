@@ -5,7 +5,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 300.0f;
+    private float speed = 250.0f;
     private float maxVelocity = 10f;
     private float minXVelocity;
     // private float lastMinXVelocity = 0f;
@@ -13,7 +13,7 @@ public class Ball : MonoBehaviour
 
     private void Awake()
     {
-        minXVelocity = speed / 50f;
+        minXVelocity = speed / 55f;
         rigidbody2 = GetComponent<Rigidbody2D>();
     }
 

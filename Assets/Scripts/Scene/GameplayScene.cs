@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameplayScene : MonoBehaviour
 {
@@ -25,6 +22,5 @@ public class GameplayScene : MonoBehaviour
     {
         if (!Application.isEditor && !Application.isMobilePlatform)
             CursorHelper.SetVisible(true);
-
     }
 }
