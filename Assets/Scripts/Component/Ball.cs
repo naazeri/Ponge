@@ -6,7 +6,7 @@ public class Ball : MonoBehaviour
 {
     [SerializeField]
     private float speed = 250.0f;
-    private float maxVelocity = 9f;
+    private float maxVelocity = 10f;
     private float minXVelocity;
     // private float lastMinXVelocity = 0f;
     private Rigidbody2D rigidbody2;

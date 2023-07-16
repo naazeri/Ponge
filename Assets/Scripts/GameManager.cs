@@ -7,6 +7,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI gameVersionText;
     [SerializeField] private Ball ball;
 
     // Paddles
@@ -45,8 +46,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        ActivateScreen(mainMenuScreen);
+        gameVersionText.text = "Version: " + Application.version;
 
+        ActivateScreen(mainMenuScreen);
         SetMenuButtonsClickListener();
     }
 
@@ -242,6 +244,11 @@ public class GameManager : MonoBehaviour
     public void OnHelpClicked()
     {
         ActivateScreen(helpScreen);
+    }
+
+    public void OpenSiteUrl()
+    {
+        Application.OpenURL("https://naazeri.ir/");
     }
 
     public void OnBackToMenuClicked()
